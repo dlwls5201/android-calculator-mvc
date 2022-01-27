@@ -4,6 +4,29 @@ class Calculator {
 
     @Throws(IllegalArgumentException::class)
     fun evaluate(inputs: String): Float {
+
+        val elements = inputs.split(" ")
+
+        if (elements.isEmpty()) {
+            throw IllegalArgumentException()
+        }
+
+        var result = elements.first().toFloat()
+
+        elements.drop(1)
+            //.windowed(2, 2)
+            .chunked(2).forEach {
+                val (operand, operator) = it
+                val enumOperand = Operation.get(operand) ?: throw IllegalArgumentException()
+                result = Operation.calculate(result, enumOperand, operator.toFloat())
+            }
+
+        return result
+    }
+
+
+    /*@Throws(IllegalArgumentException::class)
+    fun evaluate(inputs: String): Float {
         var opertaion: Operation? = null
         var result = 0f
 
@@ -38,7 +61,7 @@ class Calculator {
         }
 
         return result
-    }
+    }*/
 
     companion object {
 
